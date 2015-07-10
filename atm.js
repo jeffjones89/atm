@@ -1,48 +1,38 @@
 $(document).ready (function(){
 
-  sInput =  $('#savings_input');
-  sBalance = $('.balance').eq(1)
-  cInput =  $('#checking_input');
-  cBalance = $('.balance').eq(0)
-
 
 $('#checking_deposit').on('click', function() {
+    var deposit =  parseInt($('#checking_input').val());
+    var checking = parseInt($('#cBalance').text().replace('$', ''));
+    var balance = '$' + (deposit + checking)
 
+    $('#cBalance').text(balance);
+    $('#checking_input').val('');
 
-    newChecking = parseFloat(cBalance.html().substr(1)) + parseInt(cInput.val())
-
-    cBalance.html('$' + newChecking)
-    currentChecking = cBalance.html();
-    $(cBalance).removeClass('zero')
-    cInput.val('')
 })
 
 
 $('#checking_withdraw').on('click', function(){
 
-  newChecking = parseFloat(cBalance.html().substr(1)) - parseInt(cInput.val())
-  overdraft = parseFloat(sBalance.html().substr(1)) - newChecking
+  var withdraw =  parseInt($('#checking_input').val());
+  var checking = parseInt($('#cBalance').text().replace('$', ''));
+  var savings =  parseInt($('#sBalance').text().replace('$', ''));
+  var balance = '$' + (checking - withdraw);
+  var totalBalance = checking + savings
 
-    if (newChecking > 0){
-        cBalance.html('$' + newChecking)
-        currentChecking = cBalance.html();
-        cInput.val('')
-      }
+  if( checking - withdraw > 0) {
+    $('#cBalance').text(balance);
+  }
 
-    else if (newChecking === 0) {
-        $('.balance').eq(0).addClass('zero');
-        cBalance.html('$' + newChecking)
-        currentChecking = cBalance.html();
-        cInput.val('')
-    }
-
-    else {
-      cInput.val('');
-    }
+  else if (totalBalance - withdraw > 0){
+    var overDraft = withdraw - checking
+    $('#cBalance').text('$0')
+    $('#cBalance').addClass('zero');
+    var newSavings = '$' + (savings-overDraft);
+    $('#sBalance').text(newSavings);
+  }
 
 })
-
-
 
 $('#savings_deposit').on('click', function() {
   sInput =  $('#savings_input');
@@ -60,6 +50,7 @@ $('#savings_withdraw').on('click', function() {
     sInput =  $('#savings_input');
     sBalance = $('.balance').eq(1)
 
+
     newSavings = parseFloat(sBalance.html().substr(1)) - parseInt(sInput.val())
 
   if(newSavings > 0){
@@ -67,13 +58,9 @@ $('#savings_withdraw').on('click', function() {
     currentSavings = sBalance.html();
     sInput.val('')
   }
-  else if (newSavings === 0) {
-      $('.balance').eq(1).addClass('zero');
-      sBalance.html('$' + newSavings)
-      currentSavings = sBalance.html();
-      sInput.val('')
-    }
-  else {
+  if (newSavings === 0){
+    sBalance.html('$' + newSavings)
+    sBalance.addClass('zero')
     sInput.val('');
   }
   })
