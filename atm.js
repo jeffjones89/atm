@@ -1,35 +1,37 @@
 $(document).ready (function(){
+
 $('#checking_deposit').on('click', function() {
-    cInput =  $('#checking_input');
-    cBalance = $('.balance').eq(0)
+    var deposit =  parseInt($('#checking_input').val());
+    var checking = parseInt($('#cBalance').text().replace('$', ''));
+    var balance = '$' + (deposit + checking)
 
-    newChecking = parseFloat(cBalance.html().substr(1)) + parseInt(cInput.val())
 
-    cBalance.html('$' + newChecking)
-    currentChecking = cBalance.html();
-    $(cBalance).removeClass('zero')
-    cInput.val('')
-
+    $('#cBalance').text(balance);
+    $('#checking_input').val('');
 
 })
 
 
 $('#checking_withdraw').on('click', function(){
 
-  newChecking = parseFloat(cBalance.html().substr(1)) - parseInt(cInput.val())
+  var withdraw =  parseInt($('#checking_input').val());
+  var checking = parseInt($('#cBalance').text().replace('$', ''));
+  var savings =  parseInt($('#sBalance').text().replace('$', ''));
+  var balance = '$' + (checking - withdraw);
+  var totalBalance = checking + savings
 
+  if( checking - withdraw > 0) {
+    $('#cBalance').text(balance);
+  }
 
+  else if (totalBalance - withdraw > 0){
+    var overDraft = withdraw - checking
+    $('#cBalance').text('$0')
+    $('#cBalance').addClass('zero');
+    var newSavings = '$' + (savings-overDraft);
+    $('#sBalance').text(newSavings);
+  }
 
-    if (newChecking > 0){
-        cBalance.html('$' + newChecking)
-        currentChecking = cBalance.html();
-        cInput.val('')
-      }
-    if (newChecking === 0){
-      cBalance.html('$' + newChecking)
-      cBalance.addClass('zero')
-      cInput.val('');
-    }
 })
 
 $('#savings_deposit').on('click', function() {
